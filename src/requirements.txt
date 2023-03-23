@@ -1,0 +1,12 @@
+The TAAP is a one-tap web application for teaching assistants and professors that assists them in evaluating students' performance in a lab session.
+
+1. The system should allow the creation of new lab sessions and generate tokens for teaching assistants and students to join the active lab session.
+2. The system should generate separate tokens for TAs and students when creating a new lab session; based on the token a user uses to join the lab session, the user will be identified as either a student or TA.
+3. The system should allow students to raise a review request to TA when they finish their lab exercise.
+4. The teaching assistant should be able to see the number of students in the queue, and the system should assign review requests to TA on a first-come, first-serve basis.
+5. The system supports multiple lab sessions and multiple teaching assistants to be registered with a lab session so that the review requests will be split based on availability.
+6. Once TA taps on the TAP button to show readiness to accept a new request,  a request will be assigned to TA from the queue.
+7. The system should allow TA to grade the students and submit the evaluation.
+8. While in the queue, the students should be able to see their queue status on the page
+9. The lab session should have a set time duration, and once the session expires, the evaluation results should become available in the dashboard for download for the next 24 hours.
+10. The download should support multiple file formats (.csv, .pdf)
