@@ -52,7 +52,7 @@ How to Use
 * Clone the repository.
 * Build the code using `gradlew build` command.
 * Run the project using Spring Boot by executing `java -jar build/libs/taap-0.0.1-SNAPSHOT.jar`.
-* Access the application on a web browser at `http://localhost:8080`.
+* Access the application on a web browser at `http://localhost:8080/taap`.
 * Create a new lab session and share the token with students and teaching assistants.
 * Students can join the active lab session and complete their lab exercise.
 * Students can raise a review request to the teaching assistant when they finish their lab exercise.

@@ -17,8 +17,7 @@ public class Student implements EventListener {
   private Evaluation evaluation;
   private int queuePosition = 1;
 
-  public Student() {
-  }
+  public Student() {}
 
   public Student(String name, String id, String seat, String token) {
     this.name = name;
@@ -67,8 +66,7 @@ public class Student implements EventListener {
   @Override
   public void update(EventType eventType) {
     this.queuePosition--;
-    SseEmitter sseEmitter = TAAPManager.getInstance()
-        .getEmitter("queue-stat", token, id);
+    SseEmitter sseEmitter = TAAPManager.getInstance().getEmitter("queue-stat", token, id);
     if (sseEmitter != null) {
       try {
         sseEmitter.send(queuePosition);
@@ -82,4 +80,3 @@ public class Student implements EventListener {
     this.queuePosition = position;
   }
 }
-
