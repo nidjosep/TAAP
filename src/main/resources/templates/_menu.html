@@ -1,0 +1,35 @@
+<div class="menu-container"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
+  <nav class="navbar navbar-expand-lg navbar-light navbar-full" style="background-color: #fff;"
+       id="nav-main">
+    <a class="navbar-brand" href="#">TAAP</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" th:href="@{/}">Home<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/dashboard}">Report</a>
+        </li>
+        <li class="nav-item"
+            th:if="${session.loggedInUser != null and #strings.startsWith(session.loggedInUser, 'TA')}">
+          <a class="nav-link" th:href="@{/end-lab}" onclick="return confirmLink(event);">Terminate Lab (Caution!)</a>
+        </li>
+        <li class="nav-item logout" th:if="${session.loggedInUser != null}">
+          <a class="nav-link" th:href="@{/exit}">Logout [<span th:text="${session.labName}"></span>]</a>
+        </li>
+        </th:block>
+
+      </ul>
+    </div>
+  </nav>
+
+</div>
