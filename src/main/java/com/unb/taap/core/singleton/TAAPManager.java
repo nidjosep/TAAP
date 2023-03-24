@@ -1,5 +1,6 @@
 package com.unb.taap.core.singleton;
 
+import com.unb.taap.core.command.Invoker;
 import com.unb.taap.core.common.Utils;
 import com.unb.taap.core.state.FreeState;
 import com.unb.taap.model.LabSession;
@@ -17,6 +18,8 @@ public class TAAPManager {
   private static TAAPManager instance;
   private final Map<String, LabSession> labSessions;
   private final Map<String, String> userTokenLabIDMapping;
+
+  private final Invoker invoker = new Invoker();
 
   private TAAPManager() {
     this.labSessions = new HashMap<>();
@@ -125,5 +128,8 @@ public class TAAPManager {
     } else {
       return userTokenLabIDMapping.get(token);
     }
+  }
+  public Invoker getInvoker() {
+    return invoker;
   }
 }
