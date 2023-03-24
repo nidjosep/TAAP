@@ -130,7 +130,7 @@
       been submitted.
     </p>
     <p id="grading1">You are currently in queue: <span
-            style="font-weight: bold; font-size: 2em;">
+        style="font-weight: bold; font-size: 2em;">
       <span id="queueCount" th:text="${session.queueCount}"></span></span>.
       Please be ready
       to show your output to TA.</p>
@@ -151,8 +151,8 @@
 <div class="userTokenHolder"
      th:if="${session.loggedInUser != null and session.loggedInUser.startsWith('TA')}">
   <p><span style="display: none;" id="userToken_S" th:text="${session.userToken}"></span><span
-          class="clickableP"
-          th:onclick="copyText('userToken_S')">Share this token with students.</span>
+      class="clickableP"
+      th:onclick="copyText('userToken_S')">Share this token with students.</span>
   </p>
 </div>
 

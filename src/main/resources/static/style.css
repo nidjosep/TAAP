@@ -95,9 +95,9 @@ footer {
   color: #22225BFF;
   text-decoration: underline;
   font-weight: bold !important;
-  }
-  
-  .roundButton {
+}
+
+.roundButton {
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -105,33 +105,33 @@ footer {
   background-color: #22225BFF;
   color: white;
   margin-left: 30%;
-  }
-  
-  .tableLeftAlign tr td {
+}
+
+.tableLeftAlign tr td {
   text-align: left;
   padding: 5px;
   width: 100%;
-  }
-  
-  .ta-stats {
+}
+
+.ta-stats {
   position: absolute;
   top: 20%;
   left: 85%;
-  }
-  
-  .logout {
+}
+
+.logout {
   position: absolute;
   right: 5%;
-  }
-  
-  .userTokenHolder {
+}
+
+.userTokenHolder {
   position: absolute;
   bottom: 12%;
   left: 42%;
-  }
-  
-  @media (max-width: 768px) {
+}
+
+@media (max-width: 768px) {
   body {
-  font-size: 1.5em;
+    font-size: 1.5em;
   }
-  }
+}

@@ -129,6 +129,7 @@ public class TAAPManager {
       return userTokenLabIDMapping.get(token);
     }
   }
+
   public Invoker getInvoker() {
     return invoker;
   }

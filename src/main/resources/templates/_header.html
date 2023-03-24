@@ -145,7 +145,8 @@
     }
 
     function confirmLink(event) {
-      if (!confirm('This will terminate the lab session for all students. Are you sure you want to proceed?')) {
+      if (!confirm(
+          'This will terminate the lab session for all students. Are you sure you want to proceed?')) {
         event.preventDefault();
         return false;
       }
