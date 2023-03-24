@@ -69,10 +69,6 @@ public class DashboardController {
                 case "json":
                     gradeExportFactory = new JSONGradeExportFactory();
                     break;
-                case "PDF":
-                    gradeExportFactory = new PDFGradeExportFactory();
-
-                    break;
                 default:
                     gradeExportFactory = new CSVGradeExportFactory();
                     break;
