@@ -112,6 +112,51 @@
     </form>
   </div>
 
+  <div th:if="${session.loggedInUser == 'STUDENT'}">
+    <p th:text="'Welcome ' + ${session.name} + '. Your lab session has started.'"></p>
+    <p th:text="'Time duration: 60 mins'"></p>
+    <p>Please click the request review button once you completes your lab exercise.</p>
+    <form method="POST" action="request-review">
+      <input type="submit" value="Request Review" style="width: 100%">
+    </form>
+  </div>
+
+  <div th:if="${session.loggedInUser == 'STUDENT_SUBMITTED'}">
+    <p id="grading0">Well done, <span style="font-weight: bold; font-size: 1.2em;"
+                                      th:text="${session.name}"></span>. Your review request has
+      been submitted.
+    </p>
+    <p id="grading1">You are currently in queue: <span
+            style="font-weight: bold; font-size: 2em;">
+      <span id="queueCount" th:text="${session.queueCount}"></span></span>.
+      Please be ready
+      to show your output to TA.</p>
+    <div id="revertOption" th:if="${session?.queueCount != null and session.queueCount != '0'}">
+      <br><br><br>
+      &nbsp;Accidentally clicked submit or need more time? Revert now with a click.
+      <form method="POST" action="revert-review-request">
+        <input type="submit" value="Revert Review Request" style="width: 100%">
+      </form>
+    </div>
+    <script type="text/javascript">
+      initQueueStatSSE();
+    </script>
+  </div>
+</section>
+<br>
+
+<div class="userTokenHolder"
+     th:if="${session.loggedInUser != null and session.loggedInUser.startsWith('TA')}">
+  <p><span style="display: none;" id="userToken_S" th:text="${session.userToken}"></span><span
+          class="clickableP"
+          th:onclick="copyText('userToken_S')">Share this token with students.</span>
+  </p>
+</div>
+
+
+<th:block th:include="/_footer"></th:block>
+
+
 </section>
 
 </body>
