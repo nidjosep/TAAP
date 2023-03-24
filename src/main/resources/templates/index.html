@@ -4,10 +4,163 @@
   <meta charset="UTF-8">
   <title>TAAP</title>
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+  <th:block th:include="/_header"></th:block>
 </head>
 <body>
 
-Welcome!
+<th:block th:include="/_menu"></th:block>
+
+<section th:unless="${session.loggedInUser}" class="joinCreateContainer">
+  <div class="header">
+    <div class="left">
+      <h3>Join an active lab session?</h3>
+      <form method="POST" action="join-lab">
+        <input onfocusout="hideSeat(this.value)" type="text" name="token"
+               placeholder="Enter your token" style="width: 100%" required>
+        <br>
+        <input type="text" name="name" placeholder="Enter your name" style="width: 100%" required>
+        <br>
+        <input type="text" name="id" placeholder="Enter your ID" style="width: 100%" required>
+        <br>
+        <input id="seatInput" type="text" name="seat" placeholder="Enter your lab seat no."
+               style="width: 100%"
+               required>
+        <br>
+        <input type="submit" value="Join" style="width: 100%">
+      </form>
+      <script>
+        sessionStorage.clear();
+      </script>
+    </div>
+    <div class="separator"></div>
+    <div class="right">
+      <h4>Create a new lab session</h4>
+      <form method="POST" action="register-lab">
+        <input type="text" name="labSessionName" style="width: 80%" required>
+        <input type="submit" value="Create">
+      </form>
+      <div th:if="${taToken}">
+        <br>
+        <p>Lab Session successfully created. <span style="font-weight: bold !important;">Use the token below to start a lab session.</span>
+        </p>
+        <p><span style="display: none;" id="taToken_S" th:text="${taToken}"></span><span
+            class="clickableP"
+            th:onclick="copyText('taToken_S')">Click to copy the generated TA token</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="mainSection" class="centered">
+
+  <div th:if="${session.loggedInUser == 'TA'}">
+    <div class="ta-stats">
+      <h4>Current Stats</h4>
+      </br>
+      <p><span id="pending-evaluations"
+               th:text="${session.pendingEvaluations != null ? session.pendingEvaluations : '0'}"
+               style="font-size: 1.8em; color: lightcoral;">0</span> student(s) in queue.</p>
+      <p><span id="evaluations-done"
+               th:text="${session.evaluationsDone != null ? session.evaluationsDone : '0'}"
+               style="font-size: 1.8em; color: cadetblue;">0</span> evaluation(s) done.</p>
+    </div>
+    <p>Hello <span style="font-size: 1.2em;" th:text="${session.name}"></span>, Please TAP the
+      button below when you are ready for the next evaluation!</p>
+    <form style="text-align: center; margin-right: 5%;" method="POST" action="tap">
+      <input type="submit" class="roundButton" value="TAP"/>
+    </form>
+    <script>
+      initPendingRequestCountSSE();
+    </script>
+  </div>
+
+  <div th:if="${session.loggedInUser == 'TA_WAIT'}">
+    <h4>Waiting for new review request assignments.. <i class="fa fa-spinner fa-spin"></i></h4>
+    <script type="text/javascript">
+      initQueuePollSSE();
+    </script>
+  </div>
+
+  <div th:if="${session.loggedInUser == 'TA_EVALUATE'}">
+    <h2>Assigned Student</h2>
+    <form style="text-align: center; margin-right: 5%;" method="POST" action="grade">
+      <table class="tableLeftAlign">
+        <tr>
+          <td>Name</td>
+          <td><input type="text" th:value="${session.student.getName()}" disabled/></td>
+        </tr>
+        <tr>
+          <td>ID</td>
+          <td><input type="text" th:value="${session.student.getId()}" disabled/><input
+              type="hidden" name="id" th:value="${session.student.getId()}"/></td>
+        </tr>
+        <tr>
+          <td>Seat</td>
+          <td><input type="text" th:value="${session.student.getSeat()}" disabled/></td>
+        </tr>
+        <tr>
+          <td>Grading Scale</td>
+          <td><input type="text" name="gradingScale" th:value="100" disabled/></td>
+        </tr>
+        <tr>
+          <td>Grade</td>
+          <td><input type="text" name="grade" required/></td>
+        </tr>
+        <tr>
+          <td>Feedback</td>
+          <td><input type="text" name="feedback" required/></td>
+        </tr>
+      </table>
+      <input type="submit" value="Complete Evaluation"/>
+    </form>
+  </div>
+
+  <div th:if="${session.loggedInUser == 'STUDENT'}">
+    <p th:text="'Welcome ' + ${session.name} + '. Your lab session has started.'"></p>
+    <p th:text="'Time duration: 60 mins'"></p>
+    <p>Please click the request review button once you completes your lab exercise.</p>
+    <form method="POST" action="request-review">
+      <input type="submit" value="Request Review" style="width: 100%">
+    </form>
+  </div>
+
+  <div th:if="${session.loggedInUser == 'STUDENT_SUBMITTED'}">
+    <p id="grading0">Well done, <span style="font-weight: bold; font-size: 1.2em;"
+                                      th:text="${session.name}"></span>. Your review request has
+      been submitted.
+    </p>
+    <p id="grading1">You are currently in queue: <span
+            style="font-weight: bold; font-size: 2em;">
+      <span id="queueCount" th:text="${session.queueCount}"></span></span>.
+      Please be ready
+      to show your output to TA.</p>
+    <div id="revertOption" th:if="${session?.queueCount != null and session.queueCount != '0'}">
+      <br><br><br>
+      &nbsp;Accidentally clicked submit or need more time? Revert now with a click.
+      <form method="POST" action="revert-review-request">
+        <input type="submit" value="Revert Review Request" style="width: 100%">
+      </form>
+    </div>
+    <script type="text/javascript">
+      initQueueStatSSE();
+    </script>
+  </div>
+</section>
+<br>
+
+<div class="userTokenHolder"
+     th:if="${session.loggedInUser != null and session.loggedInUser.startsWith('TA')}">
+  <p><span style="display: none;" id="userToken_S" th:text="${session.userToken}"></span><span
+          class="clickableP"
+          th:onclick="copyText('userToken_S')">Share this token with students.</span>
+  </p>
+</div>
+
+
+<th:block th:include="/_footer"></th:block>
+
+
+</section>
 
 </body>
 </html>

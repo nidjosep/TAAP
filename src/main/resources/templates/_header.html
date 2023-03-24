@@ -1,0 +1,155 @@
+<div className="header-container"
+     xmlns:th="http://www.thymeleaf.org"
+     xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossOrigin="anonymous">
+  <link href="https://fonts.googleapis.com/css?family=Abel|Lato|Open+Sans&display=swap"
+        rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+        integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+        crossOrigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.4.js"
+          integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+          crossOrigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossOrigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossOrigin="anonymous"></script>
+  <script type="text/javascript">
+    function copyText(id) {
+      console.time('time2');
+      const temp = document.createElement('input');
+      const textToCopy = document.getElementById(id).innerHTML;
+      temp.type = 'input';
+      temp.setAttribute('value', textToCopy);
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand("copy");
+      temp.remove();
+      console.timeEnd('time2');
+      showCopyNotification(textToCopy);
+    }
+
+    function showCopyNotification(copiedText) {
+      // Show a notification that the text has been copied
+      var notification = document.createElement('div');
+      notification.textContent = 'Copied: ' + copiedText;
+      notification.style.position = 'fixed';
+      notification.style.top = '40%';
+      notification.style.right = '35%';
+      notification.style.background = '#333';
+      notification.style.color = '#fff';
+      notification.style.padding = '10px';
+      notification.style.borderRadius = '5px';
+      notification.style.opacity = '0';
+      notification.style.transition = 'opacity 0.5s';
+      document.body.appendChild(notification);
+
+      setTimeout(function () {
+        notification.style.opacity = '1';
+      }, 100);
+
+      setTimeout(function () {
+        notification.style.opacity = '0';
+      }, 2000);
+    }
+
+    function initQueuePollSSE() {
+      const eventSource = new EventSource("/taap/queue-poll");
+      eventSource.onmessage = function (event) {
+        console.log(event.data);
+        var student = JSON.parse(event.data);
+        $.post({
+          url: '/taap/update-student-session',
+          contentType: 'application/json',
+          data: JSON.stringify(student),
+          success: function (data) {
+            if (data === 'Success') {
+              window.location.href = "/taap"
+            } else {
+              console.error('Error updating session:', data);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error('Error updating session:', error);
+          }
+        });
+      }
+      eventSource.onerror = function (event) {
+        console.error('Error initQueuePollSSE SSE event:', event);
+      }
+    }
+
+    function initQueueStatSSE() {
+      const queueCount = $("#queueCount").html();
+      console.log("Queue Count = " + queueCount);
+      if (queueCount < 0) {
+        setGradedMessage();
+      }
+      const eventSource = new EventSource("/taap/queue-stat");
+      eventSource.onmessage = function (event) {
+        const queueCount = event.data;
+        console.log("Posting Queue Count = " + queueCount);
+        if (queueCount < 0) {
+          setGradedMessage();
+        } else {
+          $("#queueCount").html(queueCount);
+        }
+        $.post({
+          url: '/taap/update-queue-session',
+          contentType: 'application/json',
+          data: event.data
+        });
+      }
+      eventSource.onerror = function (event) {
+        console.error('Error initQueueStatSSE SSE event:', event);
+      }
+    }
+
+    function initPendingRequestCountSSE() {
+      const eventSource = new EventSource("/taap/pending-evaluations");
+      eventSource.onmessage = function (event) {
+        sessionStorage.setItem("pending-evaluations", event.data ?? 0);
+        populateStatFromSessionStorage();
+      }
+      eventSource.onerror = function (event) {
+        console.error('Error initSessionStatSSE SSE event:', event);
+      }
+    }
+
+    function populateStatFromSessionStorage() {
+      $("#pending-evaluations").html(sessionStorage.getItem("pending-evaluations") ?? 0);
+    }
+
+    function setGradedMessage() {
+      $("#grading0").html("");
+      $("#revertOption").html("");
+      $("#grading1").html("Congratulations. You have been graded. You can exit the lab now.");
+    }
+
+    function hideSeat(value) {
+      const seatInput = $('#seatInput');
+      if (value != null && value.indexOf(".Z") !== -1) {
+        seatInput.hide();
+        seatInput.removeAttr('required');
+      } else {
+        seatInput.show();
+        seatInput.setAttribute('required', 'true');
+      }
+    }
+
+    function confirmLink(event) {
+      if (!confirm('This will terminate the lab session for all students. Are you sure you want to proceed?')) {
+        event.preventDefault();
+        return false;
+      }
+      return true;
+    }
+  </script>
+</div>

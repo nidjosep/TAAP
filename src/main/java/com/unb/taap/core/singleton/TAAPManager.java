@@ -1,6 +1,8 @@
 package com.unb.taap.core.singleton;
 
-import com.unb.taap.common.Utils;
+import com.unb.taap.core.command.Invoker;
+import com.unb.taap.core.common.Utils;
+import com.unb.taap.core.state.FreeState;
 import com.unb.taap.model.LabSession;
 import com.unb.taap.model.Student;
 import com.unb.taap.model.TeachingAssistant;
@@ -16,6 +18,8 @@ public class TAAPManager {
   private static TAAPManager instance;
   private final Map<String, LabSession> labSessions;
   private final Map<String, String> userTokenLabIDMapping;
+
+  private final Invoker invoker = new Invoker();
 
   private TAAPManager() {
     this.labSessions = new HashMap<>();
@@ -101,6 +105,15 @@ public class TAAPManager {
     }
   }
 
+  public void enableTAForNextEvaluation(String token, String id) {
+    TokenValidation validation = validateToken(token);
+    if (UserType.TA.equals(validation.getUserType())) {
+      LabSession labSession = labSessions.get(validation.getLabID());
+      TeachingAssistant teachingAssistant = labSession.getTeachingAssistant(id);
+      teachingAssistant.changeState(new FreeState(teachingAssistant));
+    }
+  }
+
   public void endLab(String labID) {
     LabSession labSession = TAAPManager.getInstance().getLabSession(labID);
     if (labSession != null) {
@@ -115,5 +128,8 @@ public class TAAPManager {
     } else {
       return userTokenLabIDMapping.get(token);
     }
+  }
+  public Invoker getInvoker() {
+    return invoker;
   }
 }
