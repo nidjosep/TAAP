@@ -1,6 +1,7 @@
 package com.unb.taap.core.singleton;
 
 import com.unb.taap.core.common.Utils;
+import com.unb.taap.core.state.FreeState;
 import com.unb.taap.model.LabSession;
 import com.unb.taap.model.Student;
 import com.unb.taap.model.TeachingAssistant;
@@ -98,6 +99,15 @@ public class TAAPManager {
     LabSession labSession = labSessions.get(labID);
     if (labSession != null) {
       labSession.removeEmitter(Utils.getEmitterKey(name, userToken, userID));
+    }
+  }
+
+  public void enableTAForNextEvaluation(String token, String id) {
+    TokenValidation validation = validateToken(token);
+    if (UserType.TA.equals(validation.getUserType())) {
+      LabSession labSession = labSessions.get(validation.getLabID());
+      TeachingAssistant teachingAssistant = labSession.getTeachingAssistant(id);
+      teachingAssistant.changeState(new FreeState(teachingAssistant));
     }
   }
 
