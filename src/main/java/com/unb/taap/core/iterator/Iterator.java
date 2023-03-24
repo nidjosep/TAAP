@@ -1,4 +1,4 @@
-package com.unb.taap.iterator;
+package com.unb.taap.core.iterator;
 
 import com.unb.taap.model.Student;
 
