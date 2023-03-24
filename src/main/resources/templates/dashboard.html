@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>TAAP</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+  <th:block th:include="/_header"></th:block>
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css"/>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+</head>
+<body>
+
+<th:block th:include="/_menu"></th:block>
+
+<section id="mainSection" class="centered" style="width: 70%; margin-top: 60px;">
+
+  <h4>Student Grade Details</h4>
+  <br>
+  <form action="/taap/generate-grade-report" method="GET">
+    <select name="format">
+      <option value="json">JSON</option>
+      <option value="csv">CSV</option>
+    </select>
+    <button type="submit">Download Grade Report</button>
+  </form>
+  <br>
+  <table id="dashTab" style="width: 100%;">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Grade</th>
+      <th>Grade Scale</th>
+      <th>Feedback</th>
+      <th>Evaluated By</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="student : ${students}">
+      <td th:text="${student.id}"></td>
+      <td th:text="${student.name}"></td>
+      <td th:text="${student.evaluation != null ? student.evaluation.grade : ''}"></td>
+      <td th:text="${student.evaluation != null ? student.evaluation.gradingScale : ''}"></td>
+      <td th:text="${student.evaluation != null ? student.evaluation.feedback : ''}"></td>
+      <td th:text="${student.evaluation != null ? student.evaluation.evaluatedBy : ''}"></td>
+    </tr>
+    </tbody>
+  </table>
+  <script>$('#dashTab').DataTable();</script>
+</section>
+<br>
+
+
+<th:block th:include="/_footer"></th:block>
+
+</body>
+</html>
