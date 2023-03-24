@@ -1,3 +1,5 @@
+* **Joel Cherian Jacob** ([joel.cherianjacob@unb.ca](mailto:joel.cherianjacob@unb.ca))
+  Contributions: Implemented the command pattern to support undo functionality for student review submit request. Worked on the student UI.
 Contributors
 ------------
 
