@@ -35,5 +35,4 @@ public class TokenValidation {
   public void setLabSessionName(String labSessionName) {
     this.labSessionName = labSessionName;
   }
-
 }
