@@ -7,7 +7,71 @@
 </head>
 <body>
 
-Welcome!
+  <section id="mainSection" class="centered">
+
+    <div th:if="${session.loggedInUser == 'TA'}">
+      <div class="ta-stats">
+        <h4>Current Stats</h4>
+        </br>
+        <p><span id="pending-evaluations"
+                 th:text="${session.pendingEvaluations != null ? session.pendingEvaluations : '0'}"
+                 style="font-size: 1.8em; color: lightcoral;">0</span> student(s) in queue.</p>
+        <p><span id="evaluations-done"
+                 th:text="${session.evaluationsDone != null ? session.evaluationsDone : '0'}"
+                 style="font-size: 1.8em; color: cadetblue;">0</span> evaluation(s) done.</p>
+      </div>
+      <p>Hello <span style="font-size: 1.2em;" th:text="${session.name}"></span>, Please TAP the
+        button below when you are ready for the next evaluation!</p>
+      <form style="text-align: center; margin-right: 5%;" method="POST" action="tap">
+        <input type="submit" class="roundButton" value="TAP"/>
+      </form>
+      <script>
+        initPendingRequestCountSSE();
+      </script>
+    </div>
+  
+    <div th:if="${session.loggedInUser == 'TA_WAIT'}">
+      <h4>Waiting for new review request assignments.. <i class="fa fa-spinner fa-spin"></i></h4>
+      <script type="text/javascript">
+        initQueuePollSSE();
+      </script>
+    </div>
+  
+    <div th:if="${session.loggedInUser == 'TA_EVALUATE'}">
+      <h2>Assigned Student</h2>
+      <form style="text-align: center; margin-right: 5%;" method="POST" action="grade">
+        <table class="tableLeftAlign">
+          <tr>
+            <td>Name</td>
+            <td><input type="text" th:value="${session.student.getName()}" disabled/></td>
+          </tr>
+          <tr>
+            <td>ID</td>
+            <td><input type="text" th:value="${session.student.getId()}" disabled/><input
+                type="hidden" name="id" th:value="${session.student.getId()}"/></td>
+          </tr>
+          <tr>
+            <td>Seat</td>
+            <td><input type="text" th:value="${session.student.getSeat()}" disabled/></td>
+          </tr>
+          <tr>
+            <td>Grading Scale</td>
+            <td><input type="text" name="gradingScale" th:value="100" disabled/></td>
+          </tr>
+          <tr>
+            <td>Grade</td>
+            <td><input type="text" name="grade" required/></td>
+          </tr>
+          <tr>
+            <td>Feedback</td>
+            <td><input type="text" name="feedback" required/></td>
+          </tr>
+        </table>
+        <input type="submit" value="Complete Evaluation"/>
+      </form>
+    </div>
+  
+  </section>
 
 </body>
 </html>
