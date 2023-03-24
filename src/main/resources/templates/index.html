@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>TAAP</title>
   <link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
-  <th:block th:include="/_header"></th:block>
+  <th:block th:include="_header"></th:block>
 </head>
 <body>
 
-<th:block th:include="/_menu"></th:block>
+<th:block th:include="_menu"></th:block>
 
 <section th:unless="${session.loggedInUser}" class="joinCreateContainer">
   <div class="header">
@@ -157,7 +157,7 @@
 </div>
 
 
-<th:block th:include="/_footer"></th:block>
+<th:block th:include="_footer"></th:block>
 
 
 </section>
