@@ -1,6 +1,6 @@
 package com.unb.taap.core.singleton;
 
-import com.unb.taap.common.Utils;
+import com.unb.taap.core.common.Utils;
 import com.unb.taap.model.LabSession;
 import com.unb.taap.model.Student;
 import com.unb.taap.model.TeachingAssistant;
