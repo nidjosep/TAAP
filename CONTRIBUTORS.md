@@ -1,5 +1,9 @@
 Contributors
------------- 
+------------
+
+*   **Ashwanth Manikoth** ([ashwant.manikoth@unb.ca](mailto:ashwant.manikoth@unb.ca))
+    Contributions: Implemented factory pattern and iterator pattern for export file generation functionality for student grade report. Added Loggers for testing purposes.
+
 *    **Joel Cherian Jacob** ([joel.cherianjacob@unb.ca](mailto:joel.cherianjacob@unb.ca))
     Contributions: Implemented the command pattern to support undo functionality for student review submit request. Worked on the student UI.
 
