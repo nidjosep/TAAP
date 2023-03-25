@@ -8,6 +8,8 @@ import com.unb.taap.model.LabSession;
 import com.unb.taap.model.Student;
 import com.unb.taap.model.TokenValidation;
 import com.unb.taap.model.UserType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -28,30 +30,37 @@ import java.util.List;
 @Controller
 public class DashboardController {
 
+  private static final Logger logger = LoggerFactory.getLogger(DashboardController.class);
+
   @RequestMapping(value = {"/dashboard"}, method = RequestMethod.GET)
   public String createLabSession(HttpSession session, Model model) {
-    String token = String.valueOf(session.getAttribute("token"));
-    TokenValidation tokenValidation = TAAPManager.getInstance().validateToken(token);
+    try {
+      String token = String.valueOf(session.getAttribute("token"));
+      TokenValidation tokenValidation = TAAPManager.getInstance().validateToken(token);
 
-    if (tokenValidation.isValid()) {
-      List<Student> students = new ArrayList<>();
-      if (UserType.TA.equals(tokenValidation.getUserType())) {
-        StudentCollection studentCollection = TAAPManager.getInstance()
-            .getLabSession(tokenValidation.getLabID())
-            .getStudentCollection();
-        if (studentCollection != null) {
-          Iterator<Student> iterator = studentCollection.createIterator();
-          while (iterator.hasNext()) {
-            students.add(iterator.next());
+      if (tokenValidation.isValid()) {
+        List<Student> students = new ArrayList<>();
+        if (UserType.TA.equals(tokenValidation.getUserType())) {
+          StudentCollection studentCollection = TAAPManager.getInstance()
+              .getLabSession(tokenValidation.getLabID())
+              .getStudentCollection();
+          if (studentCollection != null) {
+            Iterator<Student> iterator = studentCollection.createIterator();
+            while (iterator.hasNext()) {
+              students.add(iterator.next());
+            }
           }
+        } else {
+          students.add(
+              TAAPManager.getInstance().getLabSession(tokenValidation.getLabID()).getStudent(
+                  String.valueOf(session.getAttribute("id"))));
         }
-      } else {
-        students.add(TAAPManager.getInstance().getLabSession(tokenValidation.getLabID()).getStudent(
-            String.valueOf(session.getAttribute("id"))));
+
+        model.addAttribute("students", students);
+
       }
-
-      model.addAttribute("students", students);
-
+    } catch (Exception e) {
+      logger.info(e.getMessage());
     }
     return "dashboard";
   }
@@ -62,7 +71,7 @@ public class DashboardController {
     String content = "";
     String token = String.valueOf(session.getAttribute("token"));
     TokenValidation tokenValidation = TAAPManager.getInstance().validateToken(token);
-
+    logger.info("Report export started!");
     if (tokenValidation.isValid()) {
       GradeExportFactory gradeExportFactory;
       switch (format) {

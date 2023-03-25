@@ -6,9 +6,13 @@ import com.unb.taap.core.singleton.TAAPManager;
 import com.unb.taap.core.state.BusyState;
 import com.unb.taap.core.state.State;
 import java.io.IOException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public class TeachingAssistant implements EventListener {
+
+  private static final Logger logger = LoggerFactory.getLogger(TeachingAssistant.class);
 
   private final String id;
   private final String name;
@@ -64,7 +68,7 @@ public class TeachingAssistant implements EventListener {
         try {
           sseEmitter.send(String.valueOf(labSession.getStudentsQueueSize()));
         } catch (IOException e) {
-          System.out.println(e.getMessage());
+          logger.info(e.getMessage());
         }
       }
     }
