@@ -1,6 +1,5 @@
 package com.unb.taap.core.factory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.unb.taap.core.iterator.Iterator;
 import com.unb.taap.core.iterator.StudentCollection;
@@ -8,10 +7,14 @@ import com.unb.taap.model.Student;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONGradeExporter implements GradeExporter {
 
   private final ObjectMapper objectMapper = new ObjectMapper();
+
+  private static final Logger logger = LoggerFactory.getLogger(JSONGradeExporter.class);
 
   @Override
   public String export(StudentCollection studentCollection) {
@@ -22,8 +25,8 @@ public class JSONGradeExporter implements GradeExporter {
     }
     try {
       return objectMapper.writeValueAsString(studentList);
-    } catch (JsonProcessingException e) {
-      System.out.println(e.getMessage());
+    } catch (Exception e) {
+      logger.error("JSON export Failed"+e.getMessage());
       return "";
     }
   }

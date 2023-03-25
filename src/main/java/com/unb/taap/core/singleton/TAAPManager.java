@@ -11,6 +11,8 @@ import com.unb.taap.model.UserType;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public class TAAPManager {
@@ -20,6 +22,8 @@ public class TAAPManager {
   private final Map<String, String> userTokenLabIDMapping;
 
   private final Invoker invoker = new Invoker();
+
+  private static final Logger logger = LoggerFactory.getLogger(TAAPManager.class);
 
   private TAAPManager() {
     this.labSessions = new HashMap<>();

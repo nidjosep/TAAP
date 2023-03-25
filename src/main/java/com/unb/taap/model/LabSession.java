@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 public class LabSession {
@@ -26,6 +28,8 @@ public class LabSession {
   private final EventManager eventManager;
 
   private final StudentCollection studentCollection = new StudentCollection();
+
+  private static final Logger logger = LoggerFactory.getLogger(LabSession.class);
 
   public LabSession(String labName) {
     this.labID = getHash();
@@ -119,7 +123,7 @@ public class LabSession {
         .get(emitterKey)
         .onError(
             (ex) -> {
-              System.out.println(
+              logger.info(
                   "Removing emitter with key "
                       + emitterKey
                       + " because of error: "
