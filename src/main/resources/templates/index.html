@@ -134,7 +134,7 @@
       <span id="queueCount" th:text="${session.queueCount}"></span></span>.
       Please be ready
       to show your output to TA.</p>
-    <div id="revertOption" th:if="${session?.queueCount &gt; '0'}">
+    <div id="revertOption" th:if="${session?.queueCount &gt; 1}">
       <br><br><br>
       &nbsp;Accidentally clicked submit or need more time? Revert now with a click.
       <form method="POST" action="revert-review-request">

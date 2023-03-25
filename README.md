@@ -24,7 +24,7 @@ Requirements
 * The students should be able to join the lab session using the student's token
 * The system should associate both TA and student users logged-in with the TA/Student token pair with the same lab session.
 * The system should allow students to raise a review request to the teaching assistant when they finish their lab exercise.
-* The system should allow students to revert their submission request if they are not at queue position 0
+* The system should allow students to revert their submission request if they are not at queue position 1
 * The teaching assistant should be able to see the number of students in the queue, and the system should assign review requests to teaching assistants on a first-come, first-serve basis.
 * The system supports multiple lab sessions and multiple teaching assistants to be registered with a lab session so that the review requests will be split based on availability.
 * Once the teaching assistant taps on the "ready to accept request" button, a request will be assigned to the teaching assistant from the queue.

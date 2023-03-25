@@ -1,12 +1,18 @@
 The TAAP is a one-tap web application for teaching assistants and professors that assists them in evaluating students' performance in a lab session.
 
-1. The system should allow the creation of new lab sessions and generate tokens for teaching assistants and students to join the active lab session.
-2. The system should generate separate tokens for TAs and students when creating a new lab session; based on the token a user uses to join the lab session, the user will be identified as either a student or TA.
-3. The system should allow students to raise a review request to TA when they finish their lab exercise.
-4. The teaching assistant should be able to see the number of students in the queue, and the system should assign review requests to TA on a first-come, first-serve basis.
-5. The system supports multiple lab sessions and multiple teaching assistants to be registered with a lab session so that the review requests will be split based on availability.
-6. Once TA taps on the TAP button to show readiness to accept a new request,  a request will be assigned to TA from the queue.
-7. The system should allow TA to grade the students and submit the evaluation.
-8. While in the queue, the students should be able to see their queue status on the page
-9. The lab session should have a set time duration, and once the session expires, the evaluation results should become available in the dashboard for download for the next 24 hours.
-10. The download should support multiple file formats (.csv, .pdf)
+* The system should allow users to create a new lab session, the lab owner will get a TA token
+* The lab owner should be able to login using the TA token or share it with other teaching assistants
+* The system should allow multiple teaching assistants to join a lab session with the same token
+* The system should also provide a way for logged-in teaching assistants to copy student's token
+* The students should be able to join the lab session using the student's token
+* The system should associate both TA and student users logged-in with the TA/Student token pair with the same lab session.
+* The system should allow students to raise a review request to the teaching assistant when they finish their lab exercise.
+* The system should allow students to revert their submission request if they are not at queue position 1
+* The teaching assistant should be able to see the number of students in the queue, and the system should assign review requests to teaching assistants on a first-come, first-serve basis.
+* The system supports multiple lab sessions and multiple teaching assistants to be registered with a lab session so that the review requests will be split based on availability.
+* Once the teaching assistant taps on the "ready to accept request" button, a request will be assigned to the teaching assistant from the queue.
+* The system should allow the teaching assistant to grade the students and submit the evaluation.
+* While in the queue, the students should be able to see their queue status on the page.
+* The lab session should be time limited, and TA will have the option to end a lab session.
+* Students should be able to view their grade report in the report tab.
+* The teaching assistants should be able to view the grade report of all students in the report tab.
