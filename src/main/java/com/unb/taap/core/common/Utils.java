@@ -1,4 +1,4 @@
-package com.unb.taap.common;
+package com.unb.taap.core.common;
 
 public class Utils {
 

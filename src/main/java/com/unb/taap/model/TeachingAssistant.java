@@ -56,8 +56,7 @@ public class TeachingAssistant implements EventListener {
   }
 
   public synchronized void pushSessionStatusToClient(String token, String id) {
-    SseEmitter sseEmitter = TAAPManager.getInstance()
-        .getEmitter("pending-evaluations", token, id);
+    SseEmitter sseEmitter = TAAPManager.getInstance().getEmitter("pending-evaluations", token, id);
     if (sseEmitter != null) {
       TokenValidation tokenValidation = TAAPManager.getInstance().validateToken(token);
       if (UserType.TA.equals(tokenValidation.getUserType())) {
@@ -71,4 +70,3 @@ public class TeachingAssistant implements EventListener {
     }
   }
 }
-

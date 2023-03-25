@@ -14,19 +14,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LabController {
 
-  @RequestMapping(value = {"/register-lab"}, method = RequestMethod.POST)
-  public String registerLabSession(@RequestParam("labSessionName") String labSessionName,
-      Model model) {
-    LabSession labSession = TAAPManager.getInstance()
-        .createLabSession(labSessionName);
+  @RequestMapping(
+      value = {"/register-lab"},
+      method = RequestMethod.POST)
+  public String registerLabSession(
+      @RequestParam("labSessionName") String labSessionName, Model model) {
+    LabSession labSession = TAAPManager.getInstance().createLabSession(labSessionName);
     model.addAttribute("userToken", labSession.getUserToken());
     model.addAttribute("taToken", labSession.getTaToken());
     return "index";
   }
 
-  @RequestMapping(value = {"/join-lab"}, method = RequestMethod.POST)
-  public String joinLab(@RequestParam("name") String name, @RequestParam("id") String id,
-      @RequestParam("token") String token, @RequestParam("seat") String seat, HttpSession session) {
+  @RequestMapping(
+      value = {"/join-lab"},
+      method = RequestMethod.POST)
+  public String joinLab(
+      @RequestParam("name") String name,
+      @RequestParam("id") String id,
+      @RequestParam("token") String token,
+      @RequestParam("seat") String seat,
+      HttpSession session) {
     session.setAttribute("name", name);
     session.setAttribute("id", id);
     session.setAttribute("token", token);
@@ -34,8 +41,8 @@ public class LabController {
     TokenValidation tokenValidation = TAAPManager.getInstance().validateToken(token);
     if (tokenValidation.isValid()) {
       TAAPManager.getInstance()
-          .registerParticipant(name, id, seat, token, tokenValidation.getUserType(),
-              tokenValidation.getLabID());
+          .registerParticipant(
+              name, id, seat, token, tokenValidation.getUserType(), tokenValidation.getLabID());
       session.setAttribute("loggedInUser", tokenValidation.getUserType().toString());
       session.setAttribute("labID", tokenValidation.getLabID());
       LabSession labSession = TAAPManager.getInstance().getLabSession(tokenValidation.getLabID());

@@ -115,11 +115,17 @@ public class LabSession {
 
   public SseEmitter createEmitter(String emitterKey) {
     sseEmitters.put(emitterKey, new SseEmitter(-1L));
-    sseEmitters.get(emitterKey).onError((ex) -> {
-      System.out.println(
-          "Removing emitter with key " + emitterKey + " because of error: " + ex.getMessage());
-      sseEmitters.remove(emitterKey);
-    });
+    sseEmitters
+        .get(emitterKey)
+        .onError(
+            (ex) -> {
+              System.out.println(
+                  "Removing emitter with key "
+                      + emitterKey
+                      + " because of error: "
+                      + ex.getMessage());
+              sseEmitters.remove(emitterKey);
+            });
     return sseEmitters.get(emitterKey);
   }
 
